@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
-const { ModeratorID } = require('../config.json')
+const { checkModerator } = require('../helpers/checkModerator')
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -22,7 +22,10 @@ module.exports = {
         const reason = interaction.options.getString('reason')
 
         // Check if the command is issued by a moderator
-        if (!interaction.member.roles.cache.has(ModeratorID)) {
+
+        const isModerator = checkModerator(interaction.member.id)
+
+        if (!isModerator) {
             return interaction.reply({
                 content: `You don't have permissions to ban an user. 😛`,
                 ephemeral: true,
@@ -39,7 +42,7 @@ module.exports = {
 
         await user.send(`You have been banned from ${interaction.guild.name}.\n Reason: ${reason}`)
 
-        user.kick()
+        await user.ban()
         await interaction.reply(`${user} has been banned.`);
     },
 };

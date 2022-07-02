@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
+const { checkModerator } = require('../helpers/checkModerator')
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -13,16 +14,18 @@ module.exports = {
         .addStringOption(option => {
             return option.setName('reason')
                 .setDescription('Reason for kick')
-                .setRequired(true)
         }),
     async execute(interaction) {
 
         const user = interaction.options.getMember('user')
         const reason = interaction.options.getString('reason')
 
-
         // Check if the command is issued by a moderator
-        if(!interaction.member.roles.cache.has(ModeratorID)) {
+
+        const isModerator = checkModerator(interaction.member.id)
+
+
+        if (!isModerator) {
             return interaction.reply({
                 content: `You don't have permissions to kick an user. 😛`,
                 ephemeral: true,
@@ -34,7 +37,7 @@ module.exports = {
         const highestPosition = interaction.member.roles.highest.position;
         const targetPosition = user.roles.highest.position;
 
-        if(targetPosition >= highestPosition) {
+        if (targetPosition >= highestPosition) {
             return await interaction.reply({
                 content: `You cannot kick ${user}. They have higher role than you.`,
                 ephemeral: true
@@ -44,7 +47,7 @@ module.exports = {
 
         await user.send(`You have been kicked from ${interaction.guild.name}.\n Reason: ${reason}`)
 
-        user.kick()
+        await user.kick()
         await interaction.reply(`${user} has been kicked.`);
 
 
