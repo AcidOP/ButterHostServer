@@ -28,7 +28,7 @@ module.exports = {
             const user = await Levels.fetch(userid, guildid)
             
             const levelChannel = message.guild.channels.cache.find(channel => channel.id === '991444082381557801')
-            levelChannel.send(`🎊 ${message.member} has levelled up and reached level ${user.level} 🎊`)
+            levelChannel.send(`${message.member} has levelled up and reached level ${user.level} 🎊`)
         }
     }
 }
