@@ -20,7 +20,7 @@ module.exports = {
         const user = interaction.options.getMember('user')
         const reason = interaction.options.getString('reason')
 
-        // Check if the user has permissions to ban another user
+        // Check if the command is issued by a moderator
         if (!interaction.member.roles.cache.has(ModeratorID)) {
             return interaction.reply({
                 content: `You don't have permissions to ban an user. 😛`,
@@ -30,7 +30,7 @@ module.exports = {
 
         // Check if we can ban the user
         if (user.roles.highest.position >= interaction.member.roles.highest.position) {
-            return interaction.reply({
+            return await interaction.reply({
                 content: `You cannot ban ${user}. They have higher role than you.`,
                 ephemeral: true
             });
