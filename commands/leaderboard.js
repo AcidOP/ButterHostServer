@@ -21,11 +21,14 @@ module.exports = {
 
 
         const userid = leaderboard[0].userID;
-        const user = interaction.guild.members.cache.get(userid);
-        const userName = user.user.username + '';
+        const guild = interaction.guild;
+        const user = await guild.members.fetch(userid)
+
+
         const userLevel = leaderboard[0].level + '';
         const userXP = leaderboard[0].xp + '';
-        const userAvatar = user.user.avatarURL({ format: 'png', dynamic: true, size: 1024 });
+
+        const userAvatar = user.user.avatarURL();
 
         const embed = new MessageEmbed()
             .setTitle('Leaderboard')
