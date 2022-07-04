@@ -1,11 +1,10 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
-const { checkModerator } = require('../helpers/checkModerator')
+const {ModeratorID, juniorModeratorID} = require('../config.json')
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('kick')
         .setDescription('Kicks a user from the server')
-        .setAliases(['k'])
         .addUserOption(option => {
             return option.setName('user')
                 .setDescription('The user to be kicked.')
@@ -22,7 +21,7 @@ module.exports = {
 
         // Check if the command is issued by a moderator
 
-        const isModerator = checkModerator(interaction.member.id)
+        const isModerator = interaction.member.roles.cache.has(ModeratorID) || interaction.member.roles.cache.has(juniorModeratorID)
 
 
         if (!isModerator) {

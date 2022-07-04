@@ -1,11 +1,10 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
-const { checkModerator } = require('../helpers/checkModerator')
+const {ModeratorID, juniorModeratorID} = require('../config.json')
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('clear')
         .setDescription('Clears last messages from a channel')
-        .setAliases(['c'])
         .addIntegerOption(option => {
             return option.setName('amount')
                 .setDescription('Amount of messages to be deleted')
@@ -13,7 +12,9 @@ module.exports = {
         }),
     async execute(interaction) {
 
-        const isModerator = checkModerator(interaction.member.id)
+        const isModerator = interaction.member.roles.has(ModeratorID)
+
+        return console.log({isModerator});
 
         if (!isModerator) {
             return await interaction.reply({ content: `You don't have permissions to clear messages. 😛`, ephemeral: true });
