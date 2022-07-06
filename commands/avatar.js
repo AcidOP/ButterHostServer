@@ -18,7 +18,7 @@ module.exports = {
         const embed = new MessageEmbed()
             .setTitle(`${user.username}'s avatar`)
             .setImage(avatar)
-            .setFooter({ text: `Requested by ${interaction.user}` })
+            .setFooter({ text: `Requested by ${interaction.user.username}` })
 
 
         await interaction.reply({ embeds: [embed] })
