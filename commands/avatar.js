@@ -19,8 +19,6 @@ module.exports = {
             .setTitle(`${user.username}'s avatar`)
             .setImage(avatar)
             .setFooter({ text: `Requested by ${interaction.user.username}` })
-
-
         await interaction.reply({ embeds: [embed] })
     }
 }
