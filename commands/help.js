@@ -12,7 +12,7 @@ module.exports = {
         const commands = commandFiles.map(file => require(`./${file}`))
         const commandNames = commands.map(command => command.data.name)
         const commandDescriptions = commands.map(command => command.data.description)
-        const commandNamesAndDescriptions = commandNames.map((name, index) => `${name} - ${commandDescriptions[index]}`)
+        const commandNamesAndDescriptions = commandNames.map((name, index) => `/${name} - ${commandDescriptions[index]}`)
         const commandNamesAndDescriptionsString = commandNamesAndDescriptions.join('\n')
         
 
