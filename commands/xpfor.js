@@ -24,6 +24,7 @@ module.exports = {
         }
 
         const userXP = user.xp
+        // Check if the user has already crossed the level
         const requiredXP = (targetXP >= userXP) ? targetXP - userXP : undefined;
 
         let messageEmbed;

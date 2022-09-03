@@ -8,18 +8,33 @@ module.exports = {
         .setDescription('Guide you through the commands'),
     async execute(interaction) {
 
-        const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js')).filter(file => file !== 'help.js')
-        const commands = commandFiles.map(file => require(`./${file}`))
+        const exceptions = ['help.js', 'addrole.js', 'removerole.js']
+
+        // Get all the javascript files in the commands folder
+        const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'))
+        // Remove all the admin commands from the list
+        const validCommands = commandFiles.filter(file => !exceptions.includes(file))
+
+        const commands = validCommands.map(file => require(`./${file}`))
+        // Read the name of each command
         const commandNames = commands.map(command => command.data.name)
+
+        // Read the description of each command
         const commandDescriptions = commands.map(command => command.data.description)
+
+        // Create array with the name and description of each command
         const commandNamesAndDescriptions = commandNames.map((name, index) => `/${name} - ${commandDescriptions[index]}`)
-        const commandNamesAndDescriptionsString = commandNamesAndDescriptions.join('\n')
-        
+
+        // Make name and description pairs into a string
+        const commandString = commandNamesAndDescriptions.join('\n')
+
+        const guildLogo = interaction.guild.iconURL()
 
         const embed = new MessageEmbed()
             .setTitle('Commands')
-            .setDescription(commandNamesAndDescriptionsString)
-            .setColor('#00ff00')
+            .setDescription(commandString)
+            .setColor('#000000')
+            .setThumbnail(guildLogo)
             .setFooter({ text: `Requested by ${interaction.user.username}` })
 
         await interaction.reply({ embeds: [embed] })

@@ -14,10 +14,10 @@ module.exports = {
         const memberCount = guild.memberCount;
         const channelCount = guild.channels.cache.size;
         const roleCount = guild.roles.cache.size;
-        const time = await guild.createdAt.toLocaleString();
+        const creationTime = await guild.createdAt.toLocaleString();
         const boostCount = guild.premiumSubscriptionCount || 0;
-        const serverLevel = `${guild.premiumTier}`.replace(/TIER_/g, 'Level ');
-
+        // If server has no boosts, it will return TIER_NONE, so we set it to Level 0
+        const boostTier =  guild.premiumTier ? 'Level 0' : `${guild.premiumTier}`.replace(/TIER_/g, 'Level ')
 
         const embed = new MessageEmbed()
             .setTitle(guild.name)
@@ -27,8 +27,8 @@ module.exports = {
             .addField('Channels', `${channelCount}`, false)
             .addField('Roles', `${roleCount}`, false)
             .addField('Boosts', `${boostCount}`, false)
-            .addField('Server Level', `${serverLevel}`, false)
-            .addField('Created', `${time}`, false)
+            .addField('Server Level', `${boostTier}`, false)
+            .addField('Created', `${creationTime}`, false)
             .setFooter({ text: `Requested by ${interaction.user.username}` })
 
 

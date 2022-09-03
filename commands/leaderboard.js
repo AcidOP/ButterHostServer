@@ -8,6 +8,7 @@ module.exports = {
         .setDescription('Get the top member of the server'),
     async execute(interaction) {
 
+        // Get the top user in the current server
         const limit = 1;
         const guildID = interaction.guild.id
 
@@ -24,7 +25,7 @@ module.exports = {
         const guild = interaction.guild;
         const user = await guild.members.fetch(userid)
 
-
+        // Fetch user level and xp and convert to string
         const userLevel = leaderboard[0].level + '';
         const userXP = leaderboard[0].xp + '';
 
