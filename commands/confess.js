@@ -1,16 +1,18 @@
 const { MessageEmbed } = require('discord.js');
 const { SlashCommandBuilder } = require('@discordjs/builders')
 
+const { ConfessionChannelID } = require('../config.json')
+
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('confess')
-        .setDescription('Make a confession')
+        .setDescription('Make an anonymous confession')
         .addStringOption(option => {
             return option.setName('confession')
                 .setDescription('Enter your confession')
                 .setRequired(true)
         }),
-    async execute(interaction, client) {
+    async execute(interaction) {
 
         const confession = interaction.options.getString('confession') + '';
         const confessionLenght = confession.split(' ').length
@@ -26,12 +28,12 @@ module.exports = {
             .setTitle('A new confession has been made!')
             .addField('\u200B', confession, false)
             .addField('Report to the moderators if you think this message should be removed', '\u200B', false)
+            .setColor('#000000')
 
-
-        const confessionChannel = await client.channels.fetch('993107420974948402')
+        // Find confession channel within current guild
+        const confessionChannel = interaction.guild.channels.cache.find(ch => ch.id === ConfessionChannelID);
         await confessionChannel.send({ embeds: [confessionEmbed] });
-
-        await interaction.reply({content: 'Confession sent!', ephemeral: true})
+        await interaction.reply({ content: 'Confession sent!', ephemeral: true })
 
     }
 }

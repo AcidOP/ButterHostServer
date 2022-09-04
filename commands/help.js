@@ -12,10 +12,12 @@ module.exports = {
 
         // Get all the javascript files in the commands folder
         const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'))
+
         // Remove all the admin commands from the list
         const validCommands = commandFiles.filter(file => !exceptions.includes(file))
 
         const commands = validCommands.map(file => require(`./${file}`))
+        
         // Read the name of each command
         const commandNames = commands.map(command => command.data.name)
 

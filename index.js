@@ -1,16 +1,19 @@
+require('dotenv').config()
 const fs = require('fs')
 const path = require('path')
 const Levels = require("discord-xp");
-const { token,botPassword } = require('./config.json');
 const { Client, Collection, Intents } = require('discord.js');
+
+const TOKEN = process.env.TOKEN;
+const MONGO_URI = process.env.MONGO_URI;
 
 // Discord Client Interface
 const client = new Client({
     intents: [
         Intents.FLAGS.GUILDS,
+        Intents.FLAGS.GUILD_MEMBERS,
         Intents.FLAGS.GUILD_MESSAGES,
         Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-        Intents.FLAGS.GUILD_MEMBERS,
     ],
     partials: [
         'MESSAGE',
@@ -22,7 +25,7 @@ const client = new Client({
 console.clear()
 
 // Connecting to MongoDB
-Levels.setURL(`mongodb+srv://butterbot:${botPassword}@levels.3pth6.mongodb.net/?retryWrites=true&w=majority`);
+Levels.setURL(MONGO_URI);
 
 client.commands = new Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -73,4 +76,4 @@ client.on('interactionCreate', async interaction => {
 })
 
 // Login to Discord with your client's token
-client.login(token);
+client.login(TOKEN);
